@@ -1,5 +1,5 @@
 import OutsideClickHandler from 'react-outside-click-handler';
-import React, { useState, useCallback, useImperativeHandle } from 'react';
+import React, { useState, useCallback, useImperativeHandle, useLayoutEffect } from 'react';
 
 import { Props, ModalHandlers } from './types';
 
@@ -57,7 +57,7 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 	const lock = useCallback(() => setLockModal(true), []);
 	const unlock = useCallback(() => setLockModal(false), []);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const body: HTMLBodyElement = document.querySelector('body') as HTMLBodyElement;
 
 		setModalPosition(window.screenY);
