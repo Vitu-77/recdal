@@ -57,6 +57,15 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 	const lock = useCallback(() => setLockModal(true), []);
 	const unlock = useCallback(() => setLockModal(false), []);
 
+	useEffect(() => {
+		const body: HTMLBodyElement = document.querySelector('body') as HTMLBodyElement;
+
+		setModalPosition(window.screenY);
+		setIsMounted(showModal);
+
+		showModal ? (body.style.overflow = 'hidden') : (body.style.overflow = 'auto');
+	}, [showModal]);
+
 	return (
 		<Overlay>
 			<Modal>{children}</Modal>
