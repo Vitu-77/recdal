@@ -1,5 +1,5 @@
 import OutsideClickHandler from 'react-outside-click-handler';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useImperativeHandle } from 'react';
 
 import { Props, ModalHandlers } from './types';
 
@@ -45,6 +45,14 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 
 		return setShowModal(false);
 	};
+
+	useImperativeHandle(ref, () => ({
+		getData,
+		open,
+		close,
+		lock,
+		unlock,
+	}));
 
 	const lock = useCallback(() => setLockModal(true), []);
 	const unlock = useCallback(() => setLockModal(false), []);
