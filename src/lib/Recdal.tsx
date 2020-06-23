@@ -1,11 +1,17 @@
 import OutsideClickHandler from 'react-outside-click-handler';
-import React, { useState, useCallback, useImperativeHandle, useLayoutEffect } from 'react';
+import { Modal, Overlay } from './styles';
+import React, {
+	useState,
+	useEffect,
+	useImperativeHandle,
+	forwardRef,
+	useCallback,
+	PropsWithChildren,
+} from 'react';
 
 import { Props, ModalHandlers } from './types';
 
-import { Overlay, Modal } from './styles';
-
-const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
+const Recdal: React.RefForwardingComponent<ModalHandlers, PropsWithChildren<Props>> = (
 	{ initialData = {}, defaultVisible = false, closeOnOverlayClick = true, ...rest },
 	ref
 ) => {
@@ -16,7 +22,7 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 	const [modalPosition, setModalPosition] = useState<number>(0);
 
 	const getData = useCallback(
-		(key: string) => {
+		(key?: string) => {
 			if (key) {
 				return modalData[key];
 			}
@@ -27,24 +33,35 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 	);
 
 	const open = async (data: any) => {
-		if (data) {
-			setModalData(data);
+		if (rest.onOpen) {
+			await rest.onOpen();
 		}
 
-		if (rest.onOpen) {
-			await rest?.onOpen();
+		if (data) {
+			setModalData(data);
 		}
 
 		return setShowModal(true);
 	};
 
 	const close = async () => {
+		setIsMounted(false);
+
+		if (lockModal) return;
+
 		if (rest.onClose) {
-			await rest?.onClose();
+			await rest.onClose();
 		}
 
-		return setShowModal(false);
+		setModalData({});
+
+		setTimeout(() => {
+			setShowModal(false);
+		}, rest?.transition?.duration || 400);
 	};
+
+	const lock = useCallback(() => setLockModal(true), []);
+	const unlock = useCallback(() => setLockModal(false), []);
 
 	useImperativeHandle(ref, () => ({
 		getData,
@@ -54,10 +71,7 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 		unlock,
 	}));
 
-	const lock = useCallback(() => setLockModal(true), []);
-	const unlock = useCallback(() => setLockModal(false), []);
-
-	useLayoutEffect(() => {
+	useEffect(() => {
 		const body: HTMLBodyElement = document.querySelector('body') as HTMLBodyElement;
 
 		setModalPosition(window.screenY);
@@ -66,11 +80,28 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, Props> = (
 		showModal ? (body.style.overflow = 'hidden') : (body.style.overflow = 'auto');
 	}, [showModal]);
 
+	if (!showModal) {
+		return null;
+	}
+
 	return (
-		<Overlay>
-			<Modal>{children}</Modal>
+		<Overlay
+			{...rest.overlay}
+			show={isMounted}
+			top={modalPosition}
+			transitionDuration={(rest?.transition?.duration || 300) + 200}>
+			<OutsideClickHandler
+				onOutsideClick={() => {
+					if (showModal && !lockModal && closeOnOverlayClick) {
+						close();
+					}
+				}}>
+				<Modal {...rest.modal} transition={rest?.transition} show={isMounted}>
+					{rest.children}
+				</Modal>
+			</OutsideClickHandler>
 		</Overlay>
 	);
 };
 
-export default Recdal;
+export default forwardRef(Recdal);

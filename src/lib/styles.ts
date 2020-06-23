@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
+import {StyledOverlayProps, StyledModalProps} from './types';
 
-import { OverlayProps, ModalProps } from './types';
-
-export const Overlay = styled.div<OverlayProps>`
+export const Overlay = styled.div<StyledOverlayProps>`
 	position: absolute;
 	left: 0vw;
 	width: 100%;
@@ -23,7 +22,7 @@ export const Overlay = styled.div<OverlayProps>`
 		`};
 `;
 
-export const Modal = styled.div<ModalProps>`
+export const Modal = styled.div<StyledModalProps>`
 	transition-timing-function: ${({ transition }) => transition?.timingFunction || 'linear'};
 	margin: 0;
 	padding: 0;
