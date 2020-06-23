@@ -1,0 +1,55 @@
+{
+	"name": "recdal",
+	"version": "1.0.0",
+	"author": "Victor Rodrigues <marcelo.victor05@gmail.com>",
+	"keywords": [
+		"react",
+		"modal",
+		"react-modal"
+	],
+	"license": "MIT",
+	"private": true,
+	"description": "",
+	"main": "dist/index.js",
+	"module": "dist/index.es.js",
+	"jsnext:main": "dist/index.es.js",
+	"scripts": {
+		"build": "rollup -c",
+		"test": "jest --coverage"
+	},
+	"peerDependencies": {
+		"react": "^16",
+		"react-dom": "^16",
+		"react-outside-click-handler": "^1.3.0",
+		"styled-components": "^5.1.1"
+	},
+	"dependencies": {
+		"react-outside-click-handler": "^1.3.0",
+		"styled-components": "^5.1.1"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^5.10.1",
+		"@testing-library/react": "^10.3.0",
+		"@types/jest": "^24.0.24",
+		"@types/react": "^16.9.38",
+		"@types/react-outside-click-handler": "^1.3.0",
+		"@types/styled-components": "^5.1.0",
+		"jest": "^24.9.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"rollup": "^1.27.13",
+		"rollup-plugin-commonjs": "^10.1.0",
+		"rollup-plugin-node-resolve": "^5.2.0",
+		"rollup-plugin-peer-deps-external": "^2.2.0",
+		"rollup-plugin-typescript2": "^0.25.3",
+		"ts-jest": "^24.2.0",
+		"typescript": "^3.7.3"
+	},
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "jsdom",
+		"testPathIgnorePatterns": [
+			"build/"
+		]
+	}
+}
