@@ -1,9 +1,6 @@
 import { ModalHandlers as Handlers } from './types';
 import Recdal from './Recdal';
 
-/**
- * Descrever o que é o Recdal e sua props
- * */
 export default Recdal;
 
 /**
