@@ -33,31 +33,63 @@ const Recdal: React.RefForwardingComponent<ModalHandlers, PropsWithChildren<Prop
 	);
 
 	const open = async (data: any) => {
-		if (rest.onOpen) {
-			await rest.onOpen();
-		}
+		if (rest.awaitBeforeOpening) {
+			if (rest.onOpen) {
+				await rest.onOpen();
+			}
 
-		if (data) {
-			setModalData(data);
-		}
+			if (data) {
+				setModalData(data);
+			}
 
-		return setShowModal(true);
+			return setShowModal(true);
+		} else {
+			if (data) {
+				setModalData(data);
+			}
+
+			setShowModal(true);
+
+			if (rest.onOpen) {
+				await rest.onOpen();
+			}
+		}
 	};
 
 	const close = async () => {
-		setIsMounted(false);
-
 		if (lockModal) return;
 
-		if (rest.onClose) {
-			await rest.onClose();
+		if (rest.awaitBeforeClosing) {
+			if (rest.onClose) {
+				await rest.onClose();
+			}
+
+			setIsMounted(false);
+
+			setModalData({});
+
+			setTimeout(() => {
+				setShowModal(false);
+			}, rest?.transition?.duration || 400);
+		} else {
+			setIsMounted(false);
+
+			setModalData({});
+
+			new Promise((resolve, reject) => {
+				try {
+					setTimeout(() => {
+						resolve(setShowModal(false));
+					}, rest?.transition?.duration || 400);
+				} catch (error) {
+					reject(error);
+				}
+			}).then(async () => {
+				if (rest.onClose) {
+					await rest.onClose();
+				}
+			});
 		}
-
-		setModalData({});
-
-		setTimeout(() => {
-			setShowModal(false);
-		}, rest?.transition?.duration || 400);
 	};
 
 	const lock = useCallback(() => setLockModal(true), []);

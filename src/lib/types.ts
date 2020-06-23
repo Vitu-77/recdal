@@ -26,10 +26,11 @@ export interface StyledModalProps extends HTMLAttributes<HTMLDivElement> {
 export interface Props {
 	onOpen?(): void;
 	onClose?(): void;
+	awaitBeforeOpening?: boolean;
+	awaitBeforeClosing?: boolean;
 	closeOnOverlayClick?: boolean;
 	defaultVisible?: boolean;
 	initialData?: any;
-	hideOnScroll?: boolean;
 	transition?: Transition;
 	modal?: Modal;
 	overlay?: Overlay;
@@ -37,9 +38,9 @@ export interface Props {
 }
 
 export interface ModalHandlers {
-	getData(key?: string): any;
-	open(data?: any): void;
-	close(): void;
-	lock(): void;
-	unlock(): void;
+	getData: (key?: string) => any;
+	open: (data?: any) => Promise<void>;
+	close: () => Promise<void>;
+	lock: () => void;
+	unlock: () => void;
 }
