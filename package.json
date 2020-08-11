@@ -10,7 +10,7 @@
 	],
 	"license": "MIT",
 	"private": false,
-	"description": "A react component for modals. Easy to use, however with great uses",
+	"description": "A react component for modals. Easy to use, however with great uses.",
 	"main": "dist/index.js",
 	"module": "dist/index.es.js",
 	"jsnext:main": "dist/index.es.js",
